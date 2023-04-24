@@ -183,7 +183,7 @@ public class BST {
                 root.setRight(node);
                 return;
             }
-            // Recursively insert the new node into the right subtree
+            // Recursively insert the new node into the right subtree hee hee
             recInsert(root.getRight(), node);
         }
     }
