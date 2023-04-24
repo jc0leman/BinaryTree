@@ -1,8 +1,10 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 /**
  * An Integer Binary Search Tree
- * @author: Your Name Here
+ * @author: Your Name Here Jackson Coleman
  * @version: Date
  */
 
@@ -35,7 +37,7 @@ public class BST {
      * @param nodes ArrayList of BSTNodes
      */
     public static void printNodes(ArrayList<BSTNode> nodes) {
-        for(int i=0; i<nodes.size()-1; i++) {
+        for(int i=0; i< nodes.size()-1; i++) {
             System.out.print(nodes.get(i) + "-");
         }
         System.out.println(nodes.get(nodes.size()-1));
@@ -46,44 +48,146 @@ public class BST {
      * @param val integer value to search for
      * @return true if val is in the tree, false otherwise
      */
+    // Jackson Coleman
+// This method searches for a given value in the binary search tree using recursion
+// It takes in a value to search for and returns true if it is found, false otherwise
+// It calls the recursive helper method recSearch with the root of the tree and the value to search for
     public boolean search(int val) {
-        // TODO: Complete the search function
-        return false;
+        return recSearch(this.root, val);
+    }
+
+    // This is a helper method for the search method that performs the actual search
+// It takes in the current node and the value to search for
+// If the current node is null, it returns false (value not found)
+// If the current node has the value, it returns true (value found)
+// Otherwise, it calls itself recursively on the left and right subtrees and returns the result of the OR operation between them
+    public boolean recSearch(BSTNode root, int val) {
+        if (root == null) {
+            return false;
+        }
+        if (root.getVal() == val) {
+            return true;
+        }
+        return recSearch(root.getLeft(), val) || recSearch(root.getRight(), val);
     }
 
     /**
-     * @return ArrayList of BSTNodes in inorder
+
+     @return ArrayList of BSTNodes in inorder
      */
+// This method returns an ArrayList of the nodes in the binary search tree in inorder traversal
+// It calls the recursive helper method recInOrder with the root of the tree and an empty ArrayList
     public ArrayList<BSTNode> getInorder() {
-        // TODO: Complete inorder traversal
-        return null;
+        ArrayList<BSTNode> theNodes = new ArrayList<BSTNode>();
+        return recInOrder(root, theNodes);
+    }
+    // This is a recursive helper method for the getInorder method that performs the actual inorder traversal
+// It takes in the current node and an ArrayList to store the nodes in
+// It calls itself recursively on the left subtree, adds the current node to the ArrayList, and then calls itself recursively on the right subtree
+// It returns the ArrayList
+    public ArrayList<BSTNode> recInOrder(BSTNode root,ArrayList<BSTNode> nodes) {
+        if(root.getLeft() != null)
+        {
+            recInOrder(root.getLeft(), nodes);
+        }
+        nodes.add(root);
+        if(root.getRight() != null) {
+            recInOrder(root.getRight(), nodes);
+        }
+        return nodes;
     }
 
     /**
-     * @return ArrayList of BSTNodes in preorder
+
+     @return ArrayList of BSTNodes in preorder
      */
+// This method returns an ArrayList of the nodes in the binary search tree in preorder traversal
+// It calls the recursive helper method recPreOrder with an empty ArrayList and the root of the tree
     public ArrayList<BSTNode> getPreorder() {
-        // TODO: Complete preorder traversal
-        return null;
+        ArrayList<BSTNode> nodes = new ArrayList<BSTNode>();
+        return recPreOrder(nodes, root);
+    }
+    // This is a recursive helper method for the getPreorder method that performs the actual preorder traversal
+// It takes in an ArrayList to store the nodes in and the current node
+// It adds the current node to the ArrayList, then calls itself recursively on the left and right subtrees
+// It returns the ArrayList
+    public ArrayList<BSTNode> recPreOrder(ArrayList<BSTNode> nodes ,BSTNode root)
+    {
+        nodes.add(root);
+        if(root.getLeft() != null)
+        {
+            recPreOrder(nodes, root.getLeft());
+        }
+        if(root.getRight() != null)
+        {
+            recPreOrder(nodes, root.getRight());
+        }
+        return nodes;
     }
 
     /**
      * @return ArrayList of BSTNodes in postorder
      */
     public ArrayList<BSTNode> getPostorder() {
-        // TODO: Complete postorder traversal
-        return null;
+        ArrayList<BSTNode> nodes = new ArrayList<BSTNode>();
+        return recPostOrder(nodes, root);
+    }
+    public ArrayList<BSTNode> recPostOrder(ArrayList<BSTNode> nodes, BSTNode root)
+    {
+        // Recursively traverse left subtree
+        if(root.getLeft() != null)
+        {
+            recPostOrder(nodes, root.getLeft());
+        }
+        // Recursively traverse right subtree
+        if(root.getRight() != null)
+        {
+            recPostOrder(nodes, root.getRight());
+        }
+        // Add the root node to the list
+        nodes.add(root);
+        return nodes;
     }
 
     /**
-     * Inserts the given integer value to the tree
-     * if it does not already exist. Modifies the
-     * root instance variable to be the root of the new modified tree.
-     * @param val The value ot insert
+     * Inserts a value into the binary search tree.
+     * @param val The value to insert.
      */
     public void insert(int val) {
-        // TODO: Complete insert
+        // Create a new node with the given value
+        BSTNode node = new BSTNode(val);
+        // Recursively insert the new node into the tree
+        recInsert(root, node);
     }
+
+    private void recInsert(BSTNode root, BSTNode node)
+    {
+        // If the value of the new node is less than the value of the current node
+        if(root.getVal() > node.getVal())
+        {
+            // If there is no left child, set the new node as the left child
+            if(root.getLeft() == null)
+            {
+                root.setLeft(node);
+                return;
+            }
+            // Recursively insert the new node into the left subtree
+            recInsert(root.getLeft(), node);
+        }
+        // If the value of the new node is greater than the value of the current node
+        if(root.getVal() < node.getVal())
+        {
+            // If there is no right child, set the new node as the right child
+            if(root.getRight() == null)
+            {
+                root.setRight(node);
+                return;
+            }
+            // Recursively insert the new node into the right subtree
+            recInsert(root.getRight(), node);
+        }
+    }
+
 
     /**
      * Determines if the current BST is
